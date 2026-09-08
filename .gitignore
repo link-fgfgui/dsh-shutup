@@ -1,0 +1,8 @@
+﻿node_modules/
+*.log
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+SKILL.md
+SKILL.md

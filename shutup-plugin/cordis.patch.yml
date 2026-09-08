@@ -1,0 +1,32 @@
+# dsh-shutup bundle patch
+#
+# Layer order (later wins): bundles -> profile cordis.patch.yml -> $DSH_HOME patch -> --patch.
+# This file is the bundle layer, so a user overlay can still override us.
+#
+# 1) Allow --host 0.0.0.0 again (0.0.1-rc.1 CLI surface): the ban lives in the
+#    upstream `web-startup` plugin's *code*, and loader patches cannot rename a
+#    row (`name` mismatch => skipped), so the sanctioned move is disabling that
+#    row and inserting a drop-in replacement (startup.js) that provides the
+#    identical `webStartup` service without the rejection. Auth behavior is
+#    untouched: still the 0.0.1-rc.1 style clean URLs, no ?token= gate.
+# 2) Invert --no-open: upstream web-runtime uses `!!js ctx.webStartup.openBrowser`
+#    (commander maps `--no-open` to `open=false`, default `open=true`).
+#    Negating it makes the default quiet and `--no-open` open the browser.
+#    NOTE: patch replaces the whole `config`, so every key is restated here.
+# 3) Register the host half below (index.js) that drops the ?token= gate.
+
+- id: web-startup
+  disabled: true
+
+- id: web-runtime
+  config:
+    openBrowser: !!js "!ctx.webStartup.openBrowser"
+    printUrl: true
+    surfaceContext: true
+    trustedHosts: !!js ctx.webStartup.trustedHosts
+
+- insert:
+    - id: web-startup-shutup
+      name: dsh-shutup/startup
+    - id: shutup
+      name: dsh-shutup

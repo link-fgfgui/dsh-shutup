@@ -1,0 +1,13 @@
+- id: web-startup
+  disabled: true
+- id: web-runtime
+  config:
+    openBrowser: !!js "!ctx.webStartup.openBrowser"
+    printUrl: true
+    surfaceContext: true
+    trustedHosts: !!js ctx.webStartup.trustedHosts
+- insert:
+    - id: shutup-preview-startup
+      name: ./shutup-plugin/startup.js
+    - id: shutup-preview
+      name: ./shutup-plugin/index.js
