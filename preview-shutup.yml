@@ -8,6 +8,6 @@
     trustedHosts: !!js ctx.webStartup.trustedHosts
 - insert:
     - id: shutup-preview-startup
-      name: ./shutup-plugin/startup.js
+      name: ./startup.js
     - id: shutup-preview
-      name: ./shutup-plugin/index.js
+      name: ./index.js

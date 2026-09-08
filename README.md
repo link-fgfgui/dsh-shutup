@@ -14,7 +14,7 @@
 ## 安装
 
 ```sh
-dsh plugin --profile web add <本仓库路径>\shutup-plugin
+dsh plugin --profile web add <本仓库路径>
 dsh --profile web --dump-config   # 确认 "# == dsh-shutup" 层：web-startup 被禁用、
                                   # web-startup-shutup/shutup 已插入、web-runtime 的 openBrowser 取反
 ```
@@ -41,13 +41,12 @@ dsh plugin --profile web remove dsh-shutup     # 移除
 
 ```
 .
-├── shutup-plugin/          # 正式 bundle（三件套）
-│   ├── package.json        # dsh-shutup，dsh.bundle.patch + exports(. / ./startup)
-│   ├── cordis.patch.yml    # 禁用上游 web-startup、反转 openBrowser、注册本包两行
-│   ├── index.js            # host 半：connection 服务去 token 化（401→放行，403 保留）
-│   ├── startup.js          # 上游 web-startup 的去 0.0.0.0 禁令版，提供相同 webStartup 服务
-│   └── README.md           # 包级说明
-├── preview-shutup.yml      # 免安装预览 overlay（与包内 patch 同步）
+├── package.json        # dsh-shutup，dsh.bundle.patch + exports(. / ./startup)
+├── cordis.patch.yml    # 禁用上游 web-startup、反转 openBrowser、注册本包两行
+├── index.js            # host 半：connection 服务去 token 化（401→放行，403 保留）
+├── startup.js          # 上游 web-startup 的去 0.0.0.0 禁令版，提供相同 webStartup 服务
+├── preview-shutup.yml  # 免安装预览 overlay（与包内 patch 同步）
+└── README.md           # 本文件
 ```
 
 实现要点：`0.0.0.0` 禁令写在上游 `web-startup` 插件**代码**里，patch 换不掉一行的
