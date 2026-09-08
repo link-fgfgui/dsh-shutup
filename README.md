@@ -14,7 +14,9 @@
 ## 安装
 
 ```sh
-dsh plugin --profile web add <本仓库路径>
+git clone https://github.com/link-fgfgui/dsh-shutup.git
+cd dsh-shutup
+dsh plugin --profile web add .
 dsh --profile web --dump-config   # 确认 "# == dsh-shutup" 层：web-startup 被禁用、
                                   # web-startup-shutup/shutup 已插入、web-runtime 的 openBrowser 取反
 ```
