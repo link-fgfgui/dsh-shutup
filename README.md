@@ -48,28 +48,11 @@ dsh plugin --profile web remove dsh-shutup     # 移除
 │   ├── startup.js          # 上游 web-startup 的去 0.0.0.0 禁令版，提供相同 webStartup 服务
 │   └── README.md           # 包级说明
 ├── preview-shutup.yml      # 免安装预览 overlay（与包内 patch 同步）
-├── scripts/
-│   └── check_upstream.py   # 上游兼容性看门狗：核对 7 个文件的 34 个锚点（见下）
-└── SKILL.md                # dsh 插件形态说明（bundle vs profile）
 ```
 
 实现要点：`0.0.0.0` 禁令写在上游 `web-startup` 插件**代码**里，patch 换不掉一行的
 `name`（对不上会被 loader 跳过），所以用正统手法——`disabled: true` 掉上游行，
 再插入 `web-startup-shutup` 行提供完全相同的 `webStartup` 服务。
-
-## 上游兼容性检查
-
-插件按精确字符串绑定上游的行 id / 服务名 / 方法名，上游悄悄重构会在启动时炸。
-`scripts/check_upstream.py`（仅标准库）核对 7 个上游文件的 34 个锚点，漂移即非零退出：
-
-```sh
-python scripts/check_upstream.py                                   # 对上游 HEAD（需联网）
-python scripts/check_upstream.py --local <deepseek-harness 路径>   # 对本地 checkout（免联网）
-python scripts/check_upstream.py --ref v0.2.0                      # 对指定 tag/分支/SHA
-```
-
-上游改了实现但锚点还在，一般不用动插件；锚点没了（行 id / 服务名 / 方法签名变了），
-按报错位置同步 `startup.js` / `cordis.patch.yml` / `index.js` 即可。
 
 ## 版本
 
